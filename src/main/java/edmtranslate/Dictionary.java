@@ -27,7 +27,7 @@ public class Dictionary {
 			while (rset.next()) {
 				map.put(rset.getString("COLUMN_JA"),
 						StringUtil.decamelize(rset.getString("COLUMN_EN")));
-				}
+			}
 
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -65,10 +65,14 @@ public class Dictionary {
 			final String en;
 			final String key = iterator.next();
 			final String value = dictionaryMap.get(key);
-			if (ja.indexOf(key) > 0) {
-				if (value == null || value.length() == 0) {
-					// 空文字へ置換する場合、"_"を付加しない。
-					en = ja.replace(key, "");
+			if (key == null || value == null) {
+				return replaceja(ja, iterator);
+			}
+			final int pos = ja.indexOf(key);
+			if (pos > 0) {
+				if (value.length() == 0 || "_".equals(ja.substring(pos - 1, pos))) {
+					// 空文字へ置換する場合、１文字前が"_"の場合、"_"を付加しない。
+					en = ja.replace(key, value);
 				} else {
 					en = ja.replace(key, "_" + value);
 				}

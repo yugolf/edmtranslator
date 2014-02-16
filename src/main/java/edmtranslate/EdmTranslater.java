@@ -16,11 +16,11 @@ import org.dom4j.tree.DefaultAttribute;
 public class EdmTranslater {
 
 	public void translate(String[] fileNames) {
-		
-		if(fileNames.length != 2){
+
+		if (fileNames.length != 2) {
 			throw new IllegalAccessError();
 		}
-		
+
 		final String INPUT_FILE = fileNames[0];
 		final String OUTPUT_FILE = fileNames[1];
 
@@ -48,7 +48,7 @@ public class EdmTranslater {
 			throw new RuntimeException(e);
 		} finally {
 			try {
-				if(writer != null){
+				if (writer != null) {
 					writer.close();
 				}
 			} catch (IOException e) {
@@ -66,11 +66,11 @@ public class EdmTranslater {
 
 	private void setElements(final Iterator<?> iterator, final Element preout) {
 		if (iterator.hasNext()) {
-			final Element in = (Element)iterator.next();
+			final Element in = (Element) iterator.next();
 			final Element out = preout.addElement(in.getName());
 
-//			System.out.println("[" + in.getParent().getName() + "]"
-//					+ in.getName() + ":" + out.getName());
+			// System.out.println("[" + in.getParent().getName() + "]"
+			// + in.getName() + ":" + out.getName());
 
 			setAttributes(in.attributeIterator(), out);
 
@@ -82,18 +82,19 @@ public class EdmTranslater {
 		}
 	}
 
-	private void setAttributes(final Iterator<?> iterator,
-			final Element element) {
+	private void setAttributes(final Iterator<?> iterator, final Element element) {
 		if (iterator.hasNext()) {
-			final DefaultAttribute attribute = (DefaultAttribute)iterator.next();
+			final DefaultAttribute attribute = (DefaultAttribute) iterator
+					.next();
 
 			final String name = attribute.getName();
 			final String data = attribute.getData().toString();
 			final String parent = attribute.getParent().getName();
-			//System.out.println("    " + name + "=" + data);
+			// System.out.println("    " + name + "=" + data);
 
-			if (("ENTITY".equals(parent) || "ATTR".equals(parent) || "INDEX"
-					.equals(parent)) && ("P-NAME".equals(name))) {
+			if (("ENTITY".equals(parent) || "ATTR".equals(parent)
+					|| "INDEX".equals(parent) || "RELATION".equals(parent))
+					&& ("P-NAME".equals(name))) {
 				String en = Dictionary.translate(data);
 				element.addAttribute(name, en);
 			} else {

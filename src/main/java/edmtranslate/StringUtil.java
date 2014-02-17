@@ -1,6 +1,12 @@
 package edmtranslate;
 
 public class StringUtil {
+    /**
+     * キャメル記法からスネーク記法（大文字のみ）へ変換する
+     * 
+     * @param s 文字列（キャメル記法）
+     * @return 文字列（スネーク記法）
+     */
 	public static String decamelize(final String s) {
 		if (s == null) {
 			return null;

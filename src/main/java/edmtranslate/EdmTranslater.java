@@ -31,6 +31,7 @@ public class EdmTranslater {
 		final Document output = DocumentHelper.createDocument();
 		final OutputFormat outputFormat = getOutputFormat();
 
+		//inRootを直接修正してwriterに渡す方法もありますね。
 		try {
 			input = reader.read(INPUT_FILE);
 			final Element inRoot = input.getRootElement();

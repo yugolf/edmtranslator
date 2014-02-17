@@ -2,7 +2,6 @@ package edmtranslate;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
-import junit.framework.TestCase;
 
 import org.dom4j.Document;
 import org.dom4j.io.SAXReader;
@@ -12,9 +11,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edmtranslate.EdmTranslater;
-
-public class EdmTranslaterTest extends TestCase {
+public class EdmTranslaterTest {
 
 	private final String INPUT_FILE = "src/test/resources/data/input.edm";
 	private final String OUTPUT_FILE = "src/test/resources/data/output.edm";

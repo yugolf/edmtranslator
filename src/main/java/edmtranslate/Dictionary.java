@@ -5,7 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedHashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class Dictionary {
@@ -49,41 +48,33 @@ public class Dictionary {
 		return map;
 	}
 
-	public static String translate(String ja) {
-		final String en = replaceja(ja, dictionaryMap.keySet().iterator());
-		// 変換結果の確認
-		if (en.matches("[A-Z0-9[_]]*")) {
-			System.out.println("    [Success] " + ja + "=>" + en);
-		} else {
-			System.out.println("    [Failure] " + ja + "=>" + en);
-		}
-		return en;
-	}
-
-	private static String replaceja(final String ja, Iterator<String> iterator) {
-		if (iterator.hasNext()) {
-			final String en;
-			final String key = iterator.next();
+	public static String translate(String target) {
+		final String orgstr = target;
+		for (String key : dictionaryMap.keySet()) {
 			final String value = dictionaryMap.get(key);
-			if (key == null || value == null) {
-				return replaceja(ja, iterator);
-			}
-			final int pos = ja.indexOf(key);
-			if (pos > 0) {
-				if (value.length() == 0 || "_".equals(ja.substring(pos - 1, pos))) {
+			final int pos = target.indexOf(key);
+			if (pos >= 0) {
+				if (value == null || value.length() == 0) {
+					target = target.replace(key, "");
+				} else if ("_".equals(target.substring(pos - 1, pos))) {
 					// 空文字へ置換する場合、１文字前が"_"の場合、"_"を付加しない。
-					en = ja.replace(key, value);
+					target = target.replace(key, value);
 				} else {
-					en = ja.replace(key, "_" + value);
+					target = target.replace(key, "_" + value);
 				}
+			} else if (pos == 0) {
+				target = target.replace(key, value);
 			} else {
-				en = ja.replace(key, value);
+				target = target.replace(key, "");
 			}
-			//・pos < 0の場合を考慮した方が良いかも。
-			//・ローカル変数enを使うのであれば、再帰は必要ないかも・・・
-			return replaceja(en, iterator);
-		} else {
-			return ja;
 		}
+
+		// 変換結果の確認
+		if (target.matches("[A-Z0-9[_]]*")) {
+			System.out.println("    [Success] " + orgstr + "=>" + target);
+		} else {
+			System.out.println("    [Failure] " + orgstr + "=>" + target);
+		}
+		return target;
 	}
 }

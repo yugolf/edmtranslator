@@ -7,7 +7,6 @@ import java.util.Iterator;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
@@ -27,22 +26,15 @@ public class EdmTranslater {
 
 		final SAXReader reader = new SAXReader();
 		XMLWriter writer = null;
-		Document input;
-		final Document output = DocumentHelper.createDocument();
-		final OutputFormat outputFormat = getOutputFormat();
+		final Document input;
 
-		//inRootを直接修正してwriterに渡す方法もありますね。
 		try {
 			input = reader.read(INPUT_FILE);
-			final Element inRoot = input.getRootElement();
-			final Element outRoot = output.addElement(inRoot.getName());
-
-			setAttributes(inRoot.attributeIterator(), outRoot);
-			setElements(inRoot.elementIterator(), outRoot);
+			readElements(input.getRootElement().elementIterator());
 
 			writer = new XMLWriter(new OutputStreamWriter(new FileOutputStream(
-					OUTPUT_FILE), "UTF-8"), outputFormat);
-			writer.write(output);
+					OUTPUT_FILE), "UTF-8"),getOutputFormat());
+			writer.write(input);
 			writer.flush();
 
 		} catch (DocumentException e) {
@@ -61,32 +53,28 @@ public class EdmTranslater {
 	}
 
 	private OutputFormat getOutputFormat() {
-		final OutputFormat outputFormat = new OutputFormat("  ", true);
+		final OutputFormat outputFormat = new OutputFormat();
 		outputFormat.setSuppressDeclaration(true);
-		outputFormat.setNewLineAfterDeclaration(false);
 		return outputFormat;
 	}
 
-	private void setElements(final Iterator<?> iterator, final Element preout) {
-		if (iterator.hasNext()) {
-			final Element in = (Element) iterator.next();
-			final Element out = preout.addElement(in.getName());
+	private void readElements(final Iterator<?> iterator) {
+		while (iterator.hasNext()) {
+			final Element element = (Element) iterator.next();
 
 			// System.out.println("[" + in.getParent().getName() + "]"
 			// + in.getName() + ":" + out.getName());
 
-			setAttributes(in.attributeIterator(), out);
+			translateAttributes(element.attributeIterator());
 
-			if (in.elementIterator().hasNext()) {
-				setElements(in.elementIterator(), out);
+			if (element.elementIterator().hasNext()) {
+				readElements(element.elementIterator());
 			}
-
-			setElements(iterator, preout);
 		}
 	}
 
-	private void setAttributes(final Iterator<?> iterator, final Element element) {
-		if (iterator.hasNext()) {
+	private void translateAttributes(final Iterator<?> iterator) {
+		while (iterator.hasNext()) {
 			final DefaultAttribute attribute = (DefaultAttribute) iterator
 					.next();
 
@@ -98,12 +86,8 @@ public class EdmTranslater {
 			if (("ENTITY".equals(parent) || "ATTR".equals(parent)
 					|| "INDEX".equals(parent) || "RELATION".equals(parent))
 					&& ("P-NAME".equals(name))) {
-				String en = Dictionary.translate(data);
-				element.addAttribute(name, en);
-			} else {
-				element.addAttribute(name, data);
+				attribute.setData(Dictionary.translate(data));
 			}
-			setAttributes(iterator, element);
 		}
 	}
 }

@@ -1,7 +1,8 @@
 package edmtranslate;
 
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.Iterator;
 
 import org.dom4j.Document;
@@ -25,7 +26,6 @@ public class EdmTranslater {
 		final String OUTPUT_FILE = fileNames[1];
 
 		final SAXReader reader = new SAXReader();
-		reader.setEncoding("UTF-8");
 		XMLWriter writer = null;
 		Document input;
 		final Document output = DocumentHelper.createDocument();
@@ -39,8 +39,10 @@ public class EdmTranslater {
 			setAttributes(inRoot.attributeIterator(), outRoot);
 			setElements(inRoot.elementIterator(), outRoot);
 
-			writer = new XMLWriter(new FileWriter(OUTPUT_FILE), outputFormat);
+			writer = new XMLWriter(new OutputStreamWriter(new FileOutputStream(
+					OUTPUT_FILE), "UTF-8"), outputFormat);
 			writer.write(output);
+			writer.flush();
 
 		} catch (DocumentException e) {
 			throw new RuntimeException(e);
@@ -58,7 +60,7 @@ public class EdmTranslater {
 	}
 
 	private OutputFormat getOutputFormat() {
-		final OutputFormat outputFormat = new OutputFormat("  ", true, "UTF-8");
+		final OutputFormat outputFormat = new OutputFormat("  ", true);
 		outputFormat.setSuppressDeclaration(true);
 		outputFormat.setNewLineAfterDeclaration(false);
 		return outputFormat;

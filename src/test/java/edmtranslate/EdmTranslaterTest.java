@@ -40,7 +40,6 @@ public class EdmTranslaterTest {
 		parser.translate(files);
 
 		final SAXReader reader = new SAXReader();
-		reader.setEncoding("UTF-8");
 		Document actual = reader.read(OUTPUT_FILE);
 		Document expected = reader.read(EXPECTED_FILE);
 

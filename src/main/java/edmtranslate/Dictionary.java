@@ -79,6 +79,8 @@ public class Dictionary {
 			} else {
 				en = ja.replace(key, value);
 			}
+			//・pos < 0の場合を考慮した方が良いかも。
+			//・ローカル変数enを使うのであれば、再帰は必要ないかも・・・
 			return replaceja(en, iterator);
 		} else {
 			return ja;

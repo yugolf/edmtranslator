@@ -56,4 +56,20 @@ public class DictionaryTest {
 		assertThat(actual, is(expected));
 	}
 
+	@Test
+	public void 辞書に存在しない単語() {
+		String actual = Dictionary.translate("あいうえお");
+		String expected = "あいうえお";
+
+		assertThat(actual, is(expected));
+	}
+
+	@Test
+	public void 置換対象文字がNULL() {
+		String actual = Dictionary.translate("プロジェクト（顧客）");
+		String expected = "PROJECT_CUSTOMER";
+
+		assertThat(actual, is(expected));
+	}
+
 }

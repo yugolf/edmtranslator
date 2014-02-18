@@ -37,8 +37,8 @@ public class EdmTranslator {
 		final String OUTPUT_FILE = fileNames[1];
 
 		final SAXReader reader = new SAXReader();
-		XMLWriter writer = null;
 		final Document input;
+		XMLWriter writer = null;
 
 		try {
 			// INPUTファイルの読み込み。

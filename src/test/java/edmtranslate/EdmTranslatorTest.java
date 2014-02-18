@@ -11,7 +11,13 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class EdmTranslaterTest {
+/**
+ * EdmTranslatorクラスのテストクラス。
+ *
+ * @author yugolf
+ *
+ */
+public class EdmTranslatorTest {
 
 	private final String INPUT_FILE = "src/test/resources/data/input.edm";
 	private final String OUTPUT_FILE = "src/test/resources/data/output.edm";
@@ -35,9 +41,9 @@ public class EdmTranslaterTest {
 
 	@Test
 	public void EDMファイルを全比較() throws Exception {
-		EdmTranslater parser = new EdmTranslater();
+		EdmTranslator translator = new EdmTranslator();
 		String[] files = { INPUT_FILE, OUTPUT_FILE };
-		parser.translate(files);
+		translator.translate(files);
 
 		final SAXReader reader = new SAXReader();
 		Document actual = reader.read(OUTPUT_FILE);

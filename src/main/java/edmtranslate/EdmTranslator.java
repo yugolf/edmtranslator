@@ -13,8 +13,20 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 import org.dom4j.tree.DefaultAttribute;
 
-public class EdmTranslater {
+/**
+ * EDMファイルの翻訳処理を行うクラス。
+ *
+ * @author yugolf
+ *
+ */
+public class EdmTranslator {
 
+	/**
+	 * EDMファイルを翻訳します。
+	 *
+	 * @param fileNames
+	 *            第一要素は入力ファイル名、第二要素は出力ファイル名。配列の要素数は必ず2であること。
+	 */
 	public void translate(String[] fileNames) {
 
 		if (fileNames.length != 2) {
@@ -29,11 +41,15 @@ public class EdmTranslater {
 		final Document input;
 
 		try {
+			// INPUTファイルの読み込み。
 			input = reader.read(INPUT_FILE);
+
+			// EDMの全エレメントを取得し翻訳処理を行う。
 			readElements(input.getRootElement().elementIterator());
 
+			// 翻訳した結果をファイルに出力。
 			writer = new XMLWriter(new OutputStreamWriter(new FileOutputStream(
-					OUTPUT_FILE), "UTF-8"),getOutputFormat());
+					OUTPUT_FILE), "UTF-8"), getOutputFormat());
 			writer.write(input);
 			writer.flush();
 
@@ -52,37 +68,54 @@ public class EdmTranslater {
 		}
 	}
 
+	/**
+	 * XMLWriterのインスタンス生成時に必要なフォーマット情報を取得する。
+	 *
+	 * @return OutputFormat XMLWriterのフォーマット
+	 */
 	private OutputFormat getOutputFormat() {
 		final OutputFormat outputFormat = new OutputFormat();
+
+		// XML宣言は出力しない。
 		outputFormat.setSuppressDeclaration(true);
 		return outputFormat;
 	}
 
+	/**
+	 * EDMの全エレメントを取得し翻訳処理を行う。
+	 *
+	 * @param iterator
+	 *            EDMのエレメントイテレータ
+	 */
 	private void readElements(final Iterator<?> iterator) {
 		while (iterator.hasNext()) {
 			final Element element = (Element) iterator.next();
 
-			// System.out.println("[" + in.getParent().getName() + "]"
-			// + in.getName() + ":" + out.getName());
-
+			// エレメント内のアトリビュートの翻訳。
 			translateAttributes(element.attributeIterator());
 
+			// エレメントの子要素を読み込む。
 			if (element.elementIterator().hasNext()) {
 				readElements(element.elementIterator());
 			}
 		}
 	}
 
+	/**
+	 * エレメント内のアトリビュートの翻訳を行う。
+	 *
+	 * @param iterator
+	 *            アトリビュートイテレータ
+	 */
 	private void translateAttributes(final Iterator<?> iterator) {
 		while (iterator.hasNext()) {
 			final DefaultAttribute attribute = (DefaultAttribute) iterator
 					.next();
-
 			final String name = attribute.getName();
 			final String data = attribute.getData().toString();
 			final String parent = attribute.getParent().getName();
-			// System.out.println("    " + name + "=" + data);
 
+			// 「ENTITY」「ATTR」「INDEX」「RELATION」エレメントの「P-NAME」を翻訳。
 			if (("ENTITY".equals(parent) || "ATTR".equals(parent)
 					|| "INDEX".equals(parent) || "RELATION".equals(parent))
 					&& ("P-NAME".equals(name))) {

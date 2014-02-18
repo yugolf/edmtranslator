@@ -9,6 +9,12 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+/**
+ * Dictionaryクラスのテストクラス。
+ *
+ * @author yugolf
+ *
+ */
 public class DictionaryTest {
 
 	@BeforeClass
@@ -33,12 +39,12 @@ public class DictionaryTest {
 		String expected = "PROJECT_NM";
 		assertThat(actual, is(expected));
 	}
-	
+
 	@Test
 	public void FK_顧客_プロジェクト() {
 		String actual = Dictionary.translate("FK_顧客_プロジェクト");
 		String expected = "FK_CUSTOMER_PROJECT";
-		
+
 		assertThat(actual, is(expected));
 	}
 
@@ -46,7 +52,7 @@ public class DictionaryTest {
 	public void 顧客ＩＤ() {
 		String actual = Dictionary.translate("顧客ＩＤ");
 		String expected = "CUSTOMER_ID";
-		
+
 		assertThat(actual, is(expected));
 	}
 

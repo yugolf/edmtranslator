@@ -27,7 +27,7 @@ public class EdmTranslator {
 	 * @param fileNames
 	 *            第一要素は入力ファイル名、第二要素は出力ファイル名。配列の要素数は必ず2であること。
 	 */
-	public void translate(String[] fileNames) {
+	public void translate(final String[] fileNames) {
 
 		if (fileNames.length != 2) {
 			throw new IllegalAccessError();

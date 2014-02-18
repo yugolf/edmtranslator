@@ -20,7 +20,7 @@ public class Main {
 	 *
 	 * @param args 第一要素は入力ファイル名、第二要素は出力ファイル名。（省略可）
 	 */
-	public static void main(String args[]) {
+	public static void main(final String args[]) {
 
 		System.out.println("start");
 

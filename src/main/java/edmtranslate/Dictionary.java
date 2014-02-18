@@ -71,38 +71,38 @@ public class Dictionary {
 	 *            翻訳対象文字列（日本語）
 	 * @return 翻訳結果（英語）
 	 */
-	public static String translate(String target) {
-		final String orgstr = target;
+	public static String translate(final String target) {
+		String en = target;
 		for (String key : dictionaryMap.keySet()) {
 			final String value = dictionaryMap.get(key);
-			final int pos = target.indexOf(key);
+			final int pos = en.indexOf(key);
 
 			if (pos == 0) {
 				// 先頭に置換対象が存在する場合。
 
-				target = target.replace(key, value);
+				en = en.replace(key, value);
 			} else if (pos >= 0) {
 				// 2文字目以降に置換対象文字が存在する場合。
 
 				if (value == null || value.length() == 0) {
 					// 置換文字がnull/空文字の場合は置換対象文字を取り除く。
-					target = target.replace(key, "");
-				} else if ("_".equals(target.substring(pos - 1, pos))) {
+					en = en.replace(key, "");
+				} else if ("_".equals(en.substring(pos - 1, pos))) {
 					// 空文字へ置換する場合、１文字前が"_"の場合、"_"を付加しない。
-					target = target.replace(key, value);
+					en = en.replace(key, value);
 				} else {
 					// 先頭に「_」を付与して置換する。
-					target = target.replace(key, "_" + value);
+					en = en.replace(key, "_" + value);
 				}
 			}
 		}
 
 		// 変換結果の確認。
-		if (target.matches("[A-Z0-9[_]]*")) {
-			System.out.println("    [Success] " + orgstr + "=>" + target);
+		if (en.matches("[A-Z0-9[_]]*")) {
+			System.out.println("    [Success] " + target + "=>" + en);
 		} else {
-			System.out.println("    [Failure] " + orgstr + "=>" + target);
+			System.out.println("    [Failure] " + target + "=>" + en);
 		}
-		return target;
+		return en;
 	}
 }

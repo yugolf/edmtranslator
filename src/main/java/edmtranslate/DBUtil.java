@@ -15,18 +15,19 @@ public class DBUtil {
 	/** コネクション */
 	public static final Connection connection = getConnection();
 
-	/** データベースへのコネクションを取得します。 */
+	/**
+	 * データベースへのコネクションを取得します。
+	 *
+	 * @return コネクション
+	 */
 	private static Connection getConnection() {
-		final Connection connection;
 		try {
 			final String url = "jdbc:h2:tcp://localhost:9092/demo;SCHEMA=LABO";
 			final String user = "sa";
 			final String pass = "";
-			connection = DriverManager.getConnection(url, user, pass);
+			return DriverManager.getConnection(url, user, pass);
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
-
-		return connection;
 	}
 }

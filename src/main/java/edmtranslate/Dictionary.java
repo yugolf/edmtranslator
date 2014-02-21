@@ -15,14 +15,14 @@ import java.util.Map;
  */
 public class Dictionary {
 	/** 日英辞書格納マップ */
-	private static final Map<String, String> dictionaryMap = getDictionay();
+	private static final Map<String, String> dictionaryMap = getDictionary();
 
 	/**
 	 * 辞書を取得します。
 	 *
 	 * @return 辞書マップ
 	 */
-	private static Map<String, String> getDictionay() {
+	private static Map<String, String> getDictionary() {
 
 		Map<String, String> map = new LinkedHashMap<String, String>();
 

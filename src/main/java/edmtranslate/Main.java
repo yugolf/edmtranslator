@@ -15,6 +15,8 @@ public class Main {
 	/** 出力ファイル名デフォルト値 */
 	private static final String OUTPUT_FILE = "src/test/resources/data/output.edm";
 
+	/** SQLファイル名 */
+	private static final String SQL_FILE = "src/test/resources/data/output.sql";
 	/**
 	 * メインメソッド
 	 *
@@ -40,6 +42,12 @@ public class Main {
 		// EDMファイルの翻訳
 		EdmTranslator translator = new EdmTranslator();
 		translator.translate(fileNames);
+
+		// DDLの生成
+		fileNames[0] = OUTPUT_FILE;
+		fileNames[1] = SQL_FILE;
+		GenerateDdl generateDdl = new GenerateDdl();
+		generateDdl.generate(fileNames);
 
 		System.out.println("end");
 	}
